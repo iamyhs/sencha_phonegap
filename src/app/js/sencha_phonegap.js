@@ -272,17 +272,45 @@ var App = new Ext.Application({
     },
     mainLaunch: function() {
         //if (!device || !this.launched) {return;}
-        //console.log('mainLaunch');
+    	Ext.regModel('PhoneGapFeature', {
+            idProperty: 'id',
+            fields: [
+                { name: 'id', type: 'int' },                
+                { name: 'name', type: 'string' }                                
+            ]
+        });
+
+        Ext.regStore('PhoneGapFeatureStore', {
+            model: 'PhoneGapFeature',
+            sorters: [{
+                property: 'name',
+                direction: 'ASC'
+            }],
+            proxy: {
+                type: 'localstorage',
+                id: 'phonegapfeature-app-store'
+            },
+        
+            data: [
+                   { id: 1, name: 'Accelerometer' },
+                   { id: 2, name: 'Camera' },
+                   { id: 3, name: 'Capture' },
+                   { id: 4, name: 'Compass' },
+                   { id: 5, name: 'Connection' },
+                   { id: 6, name: 'Contacts' },
+                   { id: 7, name: 'Device' },
+                   { id: 8, name: 'Events' },
+                   { id: 9, name: 'File' },
+                   { id: 10, name: 'Geolocation' },
+                   { id: 11, name: 'Media' },
+                   { id: 12, name: 'Notification' },
+                   { id: 13, name: 'Storage' }
+                   ]
+        });
         
         App.views.phonegapTopToolbar = new Ext.Toolbar({
         	title:'Sencha_PhoneGap',
-        	items:[{
-        		text:'Home',
-        		ui:'back',
-        		handler:function(){
-        			
-        		}
-        	},
+        	items:[
         	{
         		xtype:'spacer'
         	},
@@ -302,26 +330,61 @@ var App = new Ext.Application({
         	}]
         });
         
-        App.views.phonegapMain = new Ext.Panel({
-        	id:'App.views.phonegapMain',
-        	layout:'fit',
-        	dockedItems: [App.views.phonegapTopToolbar,App.views.phonegapBottomToolbar],
-        	items:[]
+        App.views.phonegapFeature = new Ext.form.FormPanel({
+        	id:'phonegapFeature',
+        	
+        	loadRecord:function(record){
+        		Ext.Msg.alert('Record Info', record.data.id+" : "+record.data.name, Ext.emptyFn);
+        	}
+        	
+        });
+                
+
+        App.views.phonegapFeaturesListToolbar = new Ext.Toolbar({
+        	title: 'Detail Info',
+            items: [
+                {
+                    text: 'Home',
+                    ui: 'back',
+                    handler: function () {
+                        App.views.viewport.setActiveItem('phonegapMain', { type: 'slide', direction: 'left' });
+                    }
+                },
+                { xtype: 'spacer' }
+            ]
         });
         
-        App.views.phoneGapTestContainer = new Ext.Panel({
-            id: 'phoneGapTestContainer',
-            layout: 'fit'
-//            dockedItems: [App.views.phonegapTopToolbar,App.views.phonegapBottomToolbar],
-//            items: [App.views.phonegapMain]
+        App.views.phonegapFeaturesList = new Ext.List({
+        	id:'phonegapFeatureList',
+        	store:'PhoneGapFeatureStore',
+        	
+        	itemTpl: '<div class="list-item-name">{name}</div>',
+            
+        	onItemDisclosure:function(record){
+        		App.views.phonegapFeature.load(record);
+        		App.views.viewport.setActiveItem('phonegapFeaturesListContainer', { type: 'slide', direction: 'right' });
+        	}        	
         });
-
+        
+        App.views.phonegapFeaturesListContainer = new Ext.Panel({
+            id: 'phonegapFeaturesListContainer',
+            layout: 'fit',
+            dockedItems: [App.views.phonegapFeaturesListToolbar],
+            items: [App.views.phonegapFeature]
+        });
+        
+        App.views.phonegapMain = new Ext.Panel({
+        	id:'phonegapMain',
+        	layout:'fit',
+        	dockedItems: [App.views.phonegapTopToolbar,App.views.phonegapBottomToolbar],
+        	items:[App.views.phonegapFeaturesList]
+        });
+        
         App.views.viewport = new Ext.Panel({
             fullscreen: true,
             layout: 'card',
-            //cardAnimation: 'slide',
-            //items: [App.views.phoneGapTestContainer]
-        	items: [App.views.phonegapMain]
+            cardAnimation: 'slide',
+        	items: [App.views.phonegapMain,App.views.phonegapFeaturesListContainer]
         })
         
     }
