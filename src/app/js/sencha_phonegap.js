@@ -7,7 +7,7 @@ var App = new Ext.Application({
         this.mainLaunch();
     },
     mainLaunch: function() {
-        if (!device || !this.launched) {return;}
+        //if (!device || !this.launched) {return;}
     	Ext.regModel('PhoneGapFeature', {
             idProperty: 'id',
             fields: [
@@ -127,7 +127,7 @@ var App = new Ext.Application({
 			clickedItemShow:function(name){
 				this.items.each(function(item){					
 					if(item.id == name){
-						item.show();
+						item.show();						
 					}else{
 						item.hide();
 					}
@@ -260,105 +260,82 @@ var App = new Ext.Application({
 			
         	id:'accelerometer',
         	fullscreen:true,
-        	layout:'auto',
-        	//html:'Accelerometer Page'
-		    
-			listeners: {				
-                //activate: function(item){
-				// show: function(item){                	
-                	// alert('ready');
-                // }
-               //hiddenchange:function(item){
-               // 	alert('ready activate');
-               		//console.log(item);
-               //},
-               
-               //render:function(){
-               //		alert('ready');
-               		//console.log(App.views.phonegapFeaturesListContainer.items);
-               //},
-               
-               /*
-               beforecardswitch:function(){
-               		alert('beforecardswitch');
-               },
-               
-			   beforeshow:function(){
-               		alert('beforeshow');
-              },
-
-				added:function(){
-               		alert('added');
-               },                              
-
-				hide:function(){
-               		alert('hide');
-               },  
-               
-               deactivate:function(){
-               		alert('deactivate');
-               },
-
-               activate:function(){
-               		alert('activate');
-               },
-               
-               show:function(){
-               		alert('show');
-               },
-               
-               //afterrender:function(){
-               //		alert('afterrender');
-               //}
-               
-               //afterlayout:function(){
-               //		alert('afterlayout');
-               //}
-               beforedeactivate:function(){
-               		alert('beforedeactivate');
-               },
-               
-               beforecardswitch:function(){
-               		alert('beforecardswitch');
-               },
-               
-               beforehide:function(){
-               		alert('beforehide');
-               },
-               
-               cardswitch:function(){
-               		alert('cardswitch');
-               },
-               
-               disable:function(){
-               		alert('disable');
-               },
-               
-               enable:function(){
-               		alert('enable');
-               },
-               */
-               move:function(){
-               		navigator.accelerometer.getCurrentAcceleration(this.onSuccess, this.onError);
-               }
-            },
-            
-                        			            	
-        	//onRender:function(){
-        		//navigator.accelerometer.getCurrentAcceleration(onSuccess, onError);
-        		//console.log(App.views.phonegapFeaturesListContainer.items);
-        		//Ext.Msg.alert('Accelerometer Ready');
-	       		//Ext.Msg.alert('Accelerometer', 'Accelerometer Ready', Ext.emptyFn);
-        		//alert('ready');        		
-        		//Ext.EventManager.stopEvent();
-        		//App.stopEvent();
-        	//},
-        	
-        	onSuccess:function(acceleration){
-        		Ext.Msg.alert('Accelerometer Info','Acceleration X: ' + acceleration.x + '\n' +
+           layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			   },
+			   
+           items:[
+           {
+           		id : 'acceltextarea',
+	           	//xtype     : 'textareafield',
+		        //grow      : true,
+		        //name      : 'message',
+		        //fieldLabel: 'Message',
+		        //anchor    : '100%',
+		        //flex :1
+		        xtype: 'textareafield',
+		        //xtype: 'textfield',
+				fieldLabel: 'Comments',
+				labelAlign: 'top',
+				//flex: 1
+	       },
+	       {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+			   //flex:1,
+			   
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		//Ext.getCmp('acceltextarea').value +="Test"+"\n";
+		           		// Ext.getCmp('acceltextarea').setValue(Ext.getCmp('acceltextarea').getValue()+
+		           		// "Test"+"\n");
+		           		//this.acceltextarea.value += "this.acceltextarea";
+		           		//Ext.Msg.alert('Accelerometer Ready');
+		           		//var oldvalue = Ext.getCmp('acceltextarea').getValue();
+		           		//Ext.getCmp('acceltextarea').setValue(oldvalue+"Accelerometer is initialized successfully\n");
+		           		navigator.accelerometer.getCurrentAcceleration(onSuccess, onError);
+		   			}
+	       		},{
+	       			id:'acceltestbtn',
+	       			xtype:'button',		           	
+		           	text:'Acceler.. Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           		//if accelerometer doesn't initialized, then make disable this button
+		           		//Ext.Msg.alert('Accelerometer Ready');
+		           		Ext.Msg.alert('Accelerometer Info','Acceleration X: ' + acceleration.x + '\n' +
 		               'Acceleration Y: ' + acceleration.y + '\n' +
 		               'Acceleration Z: ' + acceleration.z + '\n' +
 		               'Timestamp: '      + acceleration.timestamp + '\n',Ext.emptyFn);
+		               
+		               var oldvalue = Ext.getCmp('acceltextarea').getValue();
+		               Ext.getCmp('acceltextarea').setValue(oldvalue+'Accelerometer Info','Acceleration X: ' + acceleration.x + '\n' +
+		               'Acceleration Y: ' + acceleration.y + '\n' +
+		               'Acceleration Z: ' + acceleration.z + '\n' +
+		               'Timestamp: '      + acceleration.timestamp + '\n');
+		               
+		   			}
+	       		}]
+	           		
+		   	}	       
+           ],
+                        			            	
+        	onSuccess:function(acceleration){
+        		//make a "Ready" text info on the textarea
+        		Ext.getCmp('acceltextarea').setValue("Accelerometer is initialized successfully"+"\n");
+        		Ext.getCmp('acceltestbtn').setDisabled(false);
+        		//Ext.getCmp('acceltextarea').setValue("Accelerometer is initialized successfully");
+        		// Ext.Msg.alert('Accelerometer Info','Acceleration X: ' + acceleration.x + '\n' +
+		               // 'Acceleration Y: ' + acceleration.y + '\n' +
+		               // 'Acceleration Z: ' + acceleration.z + '\n' +
+		               // 'Timestamp: '      + acceleration.timestamp + '\n',Ext.emptyFn);
         	},
         	
         	onError:function(){
@@ -371,79 +348,485 @@ var App = new Ext.Application({
         App.views.Camera = new Ext.Container({
         	id:'camera',
         	fullscreen:true,
-        	html:'Camera Page'
+        	//html:'Camera Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			   },
+
+			items:[
+            {
+            	id : 'camerapanel',
+		        xtype: 'panel',		
+		        //height: '100%'		
+				//labelAlign: 'top',
+				//flex: 1
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		pictureSource=navigator.camera.PictureSourceType;
+        				destinationType=navigator.camera.DestinationType;
+        				Ext.getCmp('cameratestbtn').setDisabled(false);
+		           	}
+	       		},{
+		   			id:'cameratestbtn',
+	       			xtype:'button',		           	
+		           	text:'Camera Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           		//navigator.camera.getPicture(this.onPhotoDataSuccess, this.onFail, { quality: 50 });
+		           		navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50 });
+		           	}
+	       		}]
+		   	 }	       
+            ],
+            
+            onPhotoDataSuccess:function(imageData){
+            	//use panel itemTpl
+            	camerapanel.item = imageData;
+            },
+            
+            onFail:function(message){
+            	alert('Failed because: ' + message);	
+            },
+            
+            getPhoto:function(source){
+            	navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+		        destinationType: destinationType.FILE_URI,
+		        sourceType: source });
+            },
+            
         });
 
         App.views.Capture = new Ext.Container({
         	id:'capture',
         	fullscreen:true,
-        	html:'Capture Page'        	
+        	//html:'Capture Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			},  
+			items:[
+            {
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		
+		           	}
+	       		},{
+		   			id:'capturetestbtn',
+	       			xtype:'button',		           	
+		           	text:'Capture Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           	}
+	       		}]
+		   	 }	       
+            ],      	
         });
 
 
         App.views.Compass = new Ext.Container({
         	id:'compass',
         	fullscreen:true,
-        	html:'Compass Page'        	
+        	//html:'Compass Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			},  
+			items:[
+            {
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		
+		           	}
+	       		},{
+		   			id:'compasstestbtn',
+	       			xtype:'button',		           	
+		           	text:'Compass Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           	}
+	       		}]
+		   	 }	       
+            ],        	
         });
 
         App.views.Connection = new Ext.Container({
         	id:'connection',
         	fullscreen:true,
-        	html:'Connection Page'        	
+        	//html:'Connection Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			},  
+			items:[
+            {
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		
+		           	}
+	       		},{
+		   			id:'connectiontestbtn',
+	       			xtype:'button',		           	
+		           	text:'Connection Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           	}
+	       		}]
+		   	 }	       
+            ],        	
         });        
 
 
         App.views.Contacts = new Ext.Container({
         	id:'contacts',
         	fullscreen:true,
-        	html:'Contacts Page'        	
+        	//html:'Contacts Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			},  
+			items:[
+            {
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		
+		           	}
+	       		},{
+		   			id:'contacttestbtn',
+	       			xtype:'button',		           	
+		           	text:'Contacts Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           	}
+	       		}]
+		   	 }	       
+            ],        	
         });
 
 
         App.views.Device = new Ext.Container({
         	id:'device',
         	fullscreen:true,
-        	html:'Device Page'        	
+        	//html:'Device Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			},  
+			items:[
+            {
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		
+		           	}
+	       		},{
+		   			id:'devicetestbtn',
+	       			xtype:'button',		           	
+		           	text:'Device Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           	}
+	       		}]
+		   	 }	       
+            ],        	
         });
 
         App.views.Events = new Ext.Container({
         	id:'events',
         	fullscreen:true,
-        	html:'Events Page'        	
+        	//html:'Events Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			},  
+			items:[
+            {
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		
+		           	}
+	       		},{
+		   			id:'eventtestbtn',
+	       			xtype:'button',		           	
+		           	text:'Events Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           	}
+	       		}]
+		   	 }	       
+            ],        	
         });        
 
         App.views.File = new Ext.Container({
         	id:'file',
         	fullscreen:true,
-        	html:'File Page'        	
+        	//html:'File Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			},  
+			items:[
+            {
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		
+		           	}
+	       		},{
+		   			id:'filetestbtn',
+	       			xtype:'button',		           	
+		           	text:'File Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           	}
+	       		}]
+		   	 }	       
+            ],        	
         });
 
 
         App.views.Geolocation = new Ext.Container({
         	id:'geolocation',
         	fullscreen:true,
-        	html:'Geolocation Page'        	
+        	//html:'Geolocation Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			},  
+			items:[
+            {
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		navigator.geolocation.getCurrentPosition(this.geoOnSuccess, this.geoOnError);
+		           	}
+	       		},{
+		   			id:'geotestbtn',
+	       			xtype:'button',		           	
+		           	text:'GeoLocation Test',
+		           	//disabled: 'true',
+		           	handler:function(){
+		           		navigator.geolocation.getCurrentPosition(this.geoOnSuccess, this.geoOnError);
+		           	}
+	       		}]
+		   	 }	       
+            ],        	
+            
+            geoOnSuccess:function(){
+            	Ext.Msg.alert('Latitude: '         + position.coords.latitude            + 
+                            'Longitude: '          + position.coords.longitude             + 
+                            'Altitude: '           + position.coords.altitude              + 
+                            'Accuracy: '           + position.coords.accuracy              + 
+                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + 
+                            'Heading: '            + position.coords.heading               + 
+                            'Speed: '              + position.coords.speed                 + '\n' 
+                             );
+            },
+            
+            geoOnError:function(error){
+            	Ext.Msg.alert('Geolocation Error','Error code: ' + error.code + '\n' + 
+            				'Error message: ' + error.message + '\n');
+            }
+            
         });
 
 
         App.views.Media = new Ext.Container({
         	id:'media',
         	fullscreen:true,
-        	html:'Media Page'        	
+        	//html:'Media Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			},  
+			items:[
+            {
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		
+		           	}
+	       		},{
+		   			id:'mediatestbtn',
+	       			xtype:'button',		           	
+		           	text:'Media Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           	}
+	       		}]
+		   	 }	       
+            ],        	
         });
 
         App.views.Notification = new Ext.Container({
         	id:'notification',
         	fullscreen:true,
-        	html:'Notification Page'        	
+        	//html:'Notification Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			},  
+			items:[
+            {
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		
+		           	}
+	       		},{
+		   			id:'notitestbtn',
+	       			xtype:'button',		           	
+		           	text:'Notification Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           	}
+	       		}]
+		   	 }	       
+            ],        	
         });
 
         App.views.Storage = new Ext.Container({
         	id:'storage',
         	fullscreen:true,
-        	html:'Storage Page'        	
+        	//html:'Storage Page'
+        	layout : {
+			    type : 'vbox',
+			    align : 'stretch',
+			    pack : 'center'
+			},  
+			items:[
+            {
+	        },
+	        {
+	       		layout:{
+				    type : 'hbox',
+				    align : 'end',
+				    pack : 'center'
+			   },
+	       		items:[{
+	       			xtype:'button',
+		           	text:'Initialize',		           	
+		           	handler:function(){
+		           		
+		           	}
+	       		},{
+		   			id:'storagetestbtn',
+	       			xtype:'button',		           	
+		           	text:'Storage Test',
+		           	disabled: 'true',
+		           	handler:function(){
+		           	}
+	       		}]
+		   	 }	       
+            ],        	
         });
+                     
+                     
                                          
         App.views.phonegapMain = new Ext.Panel({
         	id:'phonegapMain',
