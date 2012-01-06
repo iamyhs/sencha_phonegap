@@ -7,7 +7,7 @@ var App = new Ext.Application({
         this.mainLaunch();
     },
     mainLaunch: function() {
-        //if (!device || !this.launched) {return;}
+        if (!device || !this.launched) {return;}
     	Ext.regModel('PhoneGapFeature', {
             idProperty: 'id',
             fields: [
